@@ -1,7 +1,27 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { ListView, View, Text } from 'react-native';
+import { employeesFetch } from '../actions';
 
-export default class EmployeeList extends Component {
+class EmployeeList extends Component {
+  componentWillMount() {
+    this.props.employeesFetch();
+
+    this.createDataSource(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.createDataSource(nextProps);
+  }
+
+  createDataSource({ employees }) {
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
+
+    this.dataSource = ds.cloneWithRows(employees);
+  }
+
   render() {
     return (
       <View>
@@ -15,3 +35,6 @@ export default class EmployeeList extends Component {
   }
 }
 
+export default connect(null, { 
+  employeesFetch
+})(EmployeeList);
