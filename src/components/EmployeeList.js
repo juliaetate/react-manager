@@ -44,7 +44,11 @@ const mapStatetoProps = state => {
     return { ...val, uid };
   });
 
-  return { employees };
+  const emp = employees;
+  const sortByKey = key => (a, b) => a[key] > b[key];
+  const sorted = emp.slice().sort(sortByKey('name'));
+
+  return { employees: sorted };
 };
 
 export default connect(mapStatetoProps, { 
